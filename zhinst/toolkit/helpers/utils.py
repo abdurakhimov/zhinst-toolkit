@@ -48,7 +48,7 @@ class TriggerMode(Enum):
 
     """
 
-    NONE = None
+    NONE = "None"
     SEND_TRIGGER = "Send Trigger"
     EXTERNAL_TRIGGER = "External Trigger"
 
