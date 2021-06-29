@@ -27,31 +27,14 @@ def test_get_on_off(n):
             Parse.get_on_off(n)
 
 
-@given(st.floats(-2, 2))
-def test_amp1(v):
-    if abs(v) > 1:
-        with pytest.raises(ValueError):
-            Parse.amp1(v)
+@given(st.integers(0, 4))
+def test_get_locked_status(n):
+    if n < 3:
+        v = Parse.get_locked_status(n)
+        assert v in ["locked", "error", "busy"]
     else:
-        assert abs(Parse.amp1(v)) <= 1
-
-
-@given(st.integers(-180, 180))
-def test_abs90(v):
-    if abs(v) >= 90:
         with pytest.raises(ValueError):
-            Parse.abs90(v)
-    else:
-        assert abs(Parse.abs90(v)) < 90
-
-
-@given(st.floats(-1, 1))
-def test_greater0(v):
-    if v <= 0:
-        with pytest.raises(ValueError):
-            Parse.greater0(v)
-    else:
-        assert Parse.greater0(v) > 0
+            Parse.get_locked_status(n)
 
 
 @given(st.floats(0.0001, 1.0))
@@ -66,3 +49,13 @@ def test_complex2deg_and_back(deg):
     complex = Parse.deg2complex(deg)
     d = Parse.complex2deg(complex)
     assert abs(d - deg) < 1e-5
+
+
+@given(year=st.integers(0, 99), month=st.integers(1, 12), build=st.integers(0, 99999))
+def test_version_parser(year, month, build):
+    # Add leading zeros to year and month number and convert to string
+    year = str(year).zfill(2)
+    month = str(month).zfill(2)
+    build = str(build)
+    version = Parse.version_parser(year + month + build)
+    assert version == year + "." + month + "." + build

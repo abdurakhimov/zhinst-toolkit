@@ -3,3 +3,5 @@ numpy
 attrs
 pytest
 hypothesis
+deprecation
+jsonschema
